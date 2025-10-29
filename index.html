@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulator Denda & Hukuman — Enhanced</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+</head>
+<body>
+  <h1>UU KOTA NASIONAL RP</h1>
+  <div class="wrap">
+    <div class="toolbar">
+      <div class="search-container">
+        <input class="search" id="globalSearch" placeholder="Cari di semua tabel... (mis. rampok, senjata, uang merah)" />
+        <button id="clearSearch">×</button>
+      </div>
+      <button class="btn" id="hitungBtn">Hitung Total</button>
+      <button class="btn secondary" id="resetBtn">Reset</button>
+      <button class="btn ghost" id="salinBtn">Salin Hasil</button>
+      <button class="btn ghost" id="discordBtn">Kirim ke Discord</button>
+      <label class="pill"><input id="idrToggle" type="checkbox" style="vertical-align:middle;margin-right:6px">Tampilkan dalam Rupiah (IDR)</label>
+    </div>
+
+    <div class="panel" id="hasil">
+      <h3>Hasil Perhitungan</h3>
+      <div class="meta">
+        <div><div class="muted">Total Denda</div><strong id="totalDenda">$0</strong></div>
+        <div><div class="muted">Total Hukuman Penjara</div><strong id="totalBulan">0 bulan</strong></div>
+        <div><div class="muted">Sanksi Non-Penjara</div><strong id="sanksiLain">-</strong></div>
+      </div>
+      <div style="margin-top:10px" class="muted" id="daftarPasal">Pasal dikenakan: -</div>
+      <div class="copy-buttons">
+        <button class="btn ghost" id="copyDendaBtn">Copy Denda</button>
+        <button class="btn ghost" id="copyPenjaraBtn">Copy Penjara</button>
+        <button class="btn ghost" id="copyPasalBtn">Copy Pasal</button>
+      </div>
+    </div>
+
+    <!-- A -->
+    <div class="section-title">Pidana Lalu Lintas KOTA NASIONAL RP</div>
+    <div class="control-row">
+      <div class="left">
+        <input class="search" id="searchA" placeholder="Cari pelanggaran... (mis. helm, razia, impound)" />
+        <button class="btn ghost" id="pilihSemuaA">Pilih semua</button>
+        <button class="btn ghost" id="hapusSemuaA">Hapus semua</button>
+      </div>
+      <span class="muted">Kode: A1–A17</span>
+    </div>
+    <div class="table-wrap">
+      <table id="tableA"><thead><tr>
+        <th>Pilih</th><th>Kode</th><th>Jenis Pelanggaran</th><th>Denda</th><th>Hukuman</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+
+    <!-- B -->
+    <div class="section-title">Pidana Ringan Kota Nasional Rp</div>
+    <div class="control-row">
+      <div class="left">
+        <input class="search" id="searchB" placeholder="Cari pelanggaran... (mis. penipuan, kekerasan)" />
+        <button class="btn ghost" id="pilihSemuaB">Pilih semua</button>
+        <button class="btn ghost" id="hapusSemuaB">Hapus semua</button>
+      </div>
+      <span class="muted">Kode: B1–B25</span>
+    </div>
+    <div class="table-wrap">
+      <table id="tableB"><thead><tr>
+        <th>Pilih</th><th>Kode</th><th>Jenis Pelanggaran</th><th>Denda</th><th>Hukuman</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+
+    <!-- C -->
+    <div class="section-title">Pidana Sedang Kota Nasional Rp</div>
+    <div class="control-row">
+      <div class="left">
+        <input class="search" id="searchC" placeholder="Cari pelanggaran... (mis. pembegalan, uang merah)" />
+        <button class="btn ghost" id="pilihSemuaC">Pilih semua</button>
+        <button class="btn ghost" id="hapusSemuaC">Hapus semua</button>
+      </div>
+      <span class="muted">Kode: C1–C21</span>
+    </div>
+    <div class="table-wrap">
+      <table id="tableC"><thead><tr>
+        <th>Pilih</th><th>Kode</th><th>Jenis Pelanggaran</th><th>Denda</th><th>Hukuman</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+
+    <!-- D (BARU) -->
+    <div class="section-title">Pidana Berat Kota Nasional Rp</div>
+    <div class="control-row">
+      <div class="left">
+        <input class="search" id="searchD" placeholder="Cari pelanggaran... (mis. senjata, terorisme)" />
+        <button class="btn ghost" id="pilihSemuaD">Pilih semua</button>
+        <button class="btn ghost" id="hapusSemuaD">Hapus semua</button>
+      </div>
+      <span class="muted">Kode: D(A)–D(X)</span>
+    </div>
+    <div class="table-wrap">
+      <table id="tableD"><thead><tr>
+        <th>Pilih</th><th>Kode</th><th>Jenis Pelanggaran</th><th>Denda</th><th>Hukuman</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+
+    <p class="footer-note">Catatan: Nilai & pasal pada contoh ini bersifat fiksi untuk keperluan demo. Selalu rujuk regulasi resmi yang berlaku.</p>
+
+    <!-- Modal for Suspect Information -->
+    <div id="discordModal" class="modal">
+      <div class="modal-content">
+        <h3>DATA DIRI SUSPEK</h3>
+        
+        <div class="form-group">
+          <label class="muted">Nama Lengkap:</label>
+          <input type="text" id="namaLengkap" class="search">
+        </div>
+        
+        <div class="form-group">
+          <label class="muted">Jenis Kelamin:</label>
+          <select id="jenisKelamin" class="search">
+            <option value="">Pilih Jenis Kelamin</option>
+            <option value="Laki-laki">Laki-laki</option>
+            <option value="Perempuan">Perempuan</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="muted">Tanggal Lahir:</label>
+          <input type="text" id="tanggalLahir" class="search" placeholder="DD/MM/YYYY">
+        </div>
+        
+        <div class="form-group">
+          <label class="muted">Pangkat:</label>
+          <input type="text" id="pangkat" class="search">
+        </div>
+        
+        <div class="form-group">
+          <label class="muted">Nama Pelapor:</label>
+          <input type="text" id="namaPelapor" class="search">
+        </div>
+        
+        <div class="form-group">
+          <label class="muted">Divisi:</label>
+          <select id="divisi" class="search">
+            <option value="">Pilih Divisi</option>
+            <option value="Tidak ada">Tidak ada</option>
+            <option value="Satlantas">Satlantas</option>
+            <option value="Sabhara">Sabhara</option>
+            <option value="Brimob">Brimob</option>
+            <option value="Bareskrim">Bareskrim</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="muted">Foto Bukti (maks. 3 file):</label>
+          <input type="file" id="fotoBukti" class="search" accept="image/*" multiple>
+          <div class="muted" style="font-size: 0.8em; margin-top: 5px;">Tahan tombol Ctrl untuk memilih beberapa file (maks. 3)</div>
+        </div>
+        
+        <div class="form-row">
+          <button class="btn secondary" id="cancelDiscord">Batal</button>
+          <button class="btn" id="sendDiscord">Kirim ke Discord</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Menu Button -->
+  <div id="floatingMenu" class="floating-menu">
+    <button id="menuToggle" class="menu-toggle" title="Menu Navigasi">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="1"></circle>
+        <circle cx="12" cy="5" r="1"></circle>
+        <circle cx="12" cy="19" r="1"></circle>
+      </svg>
+    </button>
+    <div id="menuContent" class="menu-content">
+      <a href="#hasil" class="menu-item">Hasil Perhitungan</a>
+      <a href="#tableA" class="menu-item">Pidana Lalu Lintas</a>
+      <a href="#tableB" class="menu-item">Pidana Ringan</a>
+      <a href="#tableC" class="menu-item">Pidana Sedang</a>
+      <a href="#tableD" class="menu-item">Pidana Berat</a>
+      <a href="#" class="menu-item" id="backToTop">Kembali ke Atas</a>
+    </div>
+  </div>
+  
+  <!-- Notification Container -->
+  <div id="notificationContainer"></div>
+
+  </div>
+</body>
+</html>
